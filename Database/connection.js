@@ -1,10 +1,11 @@
 const pg = require('pg');
 
+// INFORMA OS DADOS DO TEU POSTGRES
 const client = new pg.Client({
-  user: 'postgres',
+  user: '',
   host: 'localhost',
-  password: 'admin',
-  database: '3AEsports',
+  password: '',
+  database: '',
   port: 5432
 }); 
 

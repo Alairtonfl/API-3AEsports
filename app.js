@@ -11,6 +11,7 @@ app.use(bodyParser.urlencoded({
 app.use(express.json());
 app.use(cors());
 
+// INICIA O SERVER COM NODE .\APP.JS
 app.listen(3300, ()=>{
     console.log("Sever is now listening at port 3300");
 })

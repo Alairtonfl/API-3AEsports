@@ -34,10 +34,11 @@ router.get('/:id', (req, res) => {
 
 
 // INSERE UMM PRODUTO NA TABELA PASSANDO UMA REQUISICAO POST
-// SEGUINTES PARAMETROS NAME, CATEGORY, PRICE
+// SEGUINTES PARAMETROS NAME, CATEGORY, DESCRIPTION E PRICE
 router.post('/add', (req, res) => {
   const product = req.body;
-  let insertQuery = `insert into products(name, category, price) values ('${product.name}', '${product.category}', '${product.price}')`
+  let insertQuery = `insert into products(name, image, category, description, price) 
+  values ('${product.name}', '${product.image}', '${product.category}', '${product.description}', '${product.price}')`
   client.query(insertQuery, (err, result) => {
     if(!err){
       res.send('Sucess')
