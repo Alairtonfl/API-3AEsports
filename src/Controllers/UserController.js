@@ -27,12 +27,12 @@ router.get('/', (req, res) => {
 // RETORNA SUCCESSO SE O INSERT FOR EXECUTADO COM EXITO E ERRO SE O EMAIL(CHAVE UNICA) JA ESTIVER CADASTRADO NO BANCO
 router.post('/register', (req, res) => {
   const user = req.body;
-  let insertQuery = `insert into users(name, email, password) values ('${user.name}', '${user.email}', '${sha1(user.password)}')`
+  let insertQuery = `insert into users(name, email, cpf, password) values ('${user.name}', '${user.email}', '${user.cpf}','${sha1(user.password)}')`
   client.query(insertQuery, (err, result) => {
     if(!err){
-      res.send('Sucess')
+      res.send(true)
     } else {
-      console.log(err.message)
+      res.send(false)
     }
     client.end;
   })

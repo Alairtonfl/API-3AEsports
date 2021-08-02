@@ -12,7 +12,7 @@ router.use(function timeLog(req, res, next) {
 
 // RETORNA A LISTA DE TODOS OS PRODUTOS CADASTRADOS
 router.get('/', (req, res) => {
-  client.query(`Select * from products`, (err, result) => {
+  client.query(`Select * from products ORDER BY id DESC`, (err, result) => {
     if (!err) {
       res.send(result.rows);
     }
@@ -41,9 +41,9 @@ router.post('/add', (req, res) => {
   values ('${product.name}', '${product.image}', '${product.category}', '${product.description}', '${product.price}')`
   client.query(insertQuery, (err, result) => {
     if(!err){
-      res.send('Sucess')
+      res.send(true)
     } else {
-      console.log(err.message)
+      console.log(false)
     }
     client.end;
   })
