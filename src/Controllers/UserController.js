@@ -1,60 +1,38 @@
-const client = require('../../Database/connection.js');
-const express = require('express');
-const app = express();
-const sha1 = require('sha1');
-const router = express.Router();
+const UserRepository = require('../repository/UserRepository');
+const bcrypt = require('../validations/BcryptValidation');
+const UserValidation = require('../validations/UserValidation');
+module.exports = {
+  async index(req, res) {
+    const users = await UserRepository.selectUsers();
+    return res.send(users);
+  },
 
-// MOSTRA O LOG DE CADA REQUISIÇÃO FEITA PARA A API
-router.use(function timeLog(req, res, next) {
-  console.log('Time: ', Date.now());
-  next();
-})
-
-client.connect();
-
-// RETORNA ID, NOME E EMAIL DE TODOS OS USUARIOS CADASTRADOS NO BANCO
-router.get('/', (req, res) => {
-  client.query(`Select id, name, email from users`, (err, result) => {
-    if (!err) {
-      res.send(result.rows);
+  async store(req, res){
+    try{
+      if(UserValidation.isEmpty(req.body))
+        return res.status(400).send('Algum campo nao foi cadastrado')
+      
+      const password = await bcrypt.hashPassword(req.body.password)
+      const { name, email, cpf} = req.body;
+      const user = await UserRepository.insertUser(name,email,password,cpf);
+      return res.send(user)
+    } catch(e){
+      return res.status(400).send(e);
     }
-  });
-  client.end;
-})
+  },
 
-// REGISTRO DE USUARIO, RECEBE COMO PARAMETRO UMA REQUISIÇAO DE FORMULARIO DO TIPO POST
-// SEGUINTES PARAMETROS NAME, EMAIL E PASSWORD
-// RETORNA SUCCESSO SE O INSERT FOR EXECUTADO COM EXITO E ERRO SE O EMAIL(CHAVE UNICA) JA ESTIVER CADASTRADO NO BANCO
-router.post('/register', (req, res) => {
-  const user = req.body;
-  let insertQuery = `insert into users(name, email, cpf, password) values ('${user.name}', '${user.email}', '${user.cpf}','${sha1(user.password)}')`
-  client.query(insertQuery, (err, result) => {
-    if(!err){
-      res.send(true)
-    } else {
-      res.send(false)
+  async login(req, res){
+    const { email, password } = req.body;
+    const user = await UserRepository.findByEmail(email);
+    try{
+      if(!user)
+        return res.status(400).send('Usuario inexistente')
+      if(!await bcrypt.comparePassword(password, user.password))
+        return res.status(400).send('Credenciais incorretas')
+      user.password = undefined;
+      res.send(user)
+    } catch(e){
+      return res.status(400).send(e);
     }
-    client.end;
-  })
-})
-
-
-// RECEBE COMO PARAMETRO UMA REQUISIÇAO DO TIPO POST
-// RETORNA TRUE SE FOR ENCONTRADO ALGUM USUARIO COM O EMAIL E SENHA INFORMADOS
-router.post('/login', (req, res) => {
-  const user = req.body;
-  let query = `Select name, email from users WHERE email = '${user.email}' AND password = '${sha1(user.password)}'`
-  client.query(query, (err, result) => {
-    if(!err){
-      if(result.rowCount == 1){
-        res.send(true)
-      } else{
-        res.send(false)
-      }
-    }
-    client.end;
-  })
-})
-
-
-module.exports = router;
+  },
+}
