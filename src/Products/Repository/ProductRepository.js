@@ -10,7 +10,9 @@ module.exports = {
 
   async insertProduct(name, image, category, description, price) {
     try {
+      console.log(name)
       const product = await Product.create({ name, image, category, description, price });
+      console.log(product)
       return product;
     } catch (e) {
       return e;

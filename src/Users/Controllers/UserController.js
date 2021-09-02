@@ -14,8 +14,8 @@ module.exports = {
         return res.status(400).send('Algum campo nao foi cadastrado')
       
       const password = await UserValidation.hashPassword(req.body.password);
-      const { name, email, cpf } = req.body;
-      const user = await UserRepository.insertUsers(name, email, password, cpf);
+      const { name, email, cpf, admin } = req.body;
+      const user = await UserRepository.insertUsers(name, email, password, cpf, admin);
       return res.send(user)
     } catch(e){
       return res.status(400).send(e);

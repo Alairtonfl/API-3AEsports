@@ -10,7 +10,7 @@ routes.post('/users/register', UserController.store)
 routes.post('/users/login', UserController.login);
 
 routes.get('/products', ProductController.index);
-routes.post('/products', isAdmin.isAdmin, ProductController.store);
+routes.post('/products', ProductController.store);
 routes.get('/products/:id', ProductController.selectById);
 routes.put('/products/:id', isAdmin.isAdmin, ProductController.updateById);
 routes.delete('/products/:id', ProductController.deleteById);

@@ -6,7 +6,8 @@ class User extends Model {
       name: DataTypes.STRING,
       email: DataTypes.STRING,
       password: DataTypes.STRING,
-      cpf: DataTypes.STRING
+      cpf: DataTypes.STRING,
+      admin: DataTypes.BOOLEAN
     }, {
       sequelize,
       modelName: 'User',

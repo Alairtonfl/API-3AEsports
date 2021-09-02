@@ -9,8 +9,8 @@ module.exports = {
 
   async store(req, res){
     try{
-     
       const { name, image, category, description, price } = req.body;
+      console.log(req.body)
       const product = await ProductRepository.insertProduct(name, image, category, description, price);
       return res.send(product)
     } catch(e){
@@ -44,7 +44,7 @@ module.exports = {
     const { name, image, category, description, price } = req.body;
     console.log(id)
     try{
-      await ProductRepository.updateById(id,name, image, category, description, price);
+      await ProductRepository.updateById(id, name, image, category, description, price);
       res.status(200).send(true)
     } catch(e){
       return res.status(400).send(e);

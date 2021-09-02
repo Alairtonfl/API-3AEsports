@@ -9,9 +9,9 @@ module.exports = {
     return users;
   },
 
-  async insertUsers(name, email, password, cpf){
+  async insertUsers(name, email, password, cpf, admin){
     try{
-      const user = await User.create({name, email, password, cpf});
+      const user = await User.create({name, email, password, cpf, admin});
       return user;
     }catch(e){
       return e;
