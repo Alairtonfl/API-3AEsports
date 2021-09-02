@@ -5,14 +5,17 @@ class User extends Model {
     super.init({
       name: DataTypes.STRING,
       email: DataTypes.STRING,
-      cpf: DataTypes.STRING,
       password: DataTypes.STRING,
-      admin: DataTypes.BOOLEAN
+      cpf: DataTypes.STRING
     }, {
-      sequelize
+      sequelize,
+      modelName: 'User',
+      tableName: 'users',
+      freezeTableName: true
     }
     )
   }
+
 }
 
 module.exports = User;
